@@ -1,0 +1,10 @@
+[package]
+name = "bob"
+version = "0.1.0"
+authors = ["sourcepirate <plasmashadowx@gmail.com>"]
+
+[dependencies]
+serde = "*"
+clap = "*"
+reqwest = "*"
+pbr = "*"
