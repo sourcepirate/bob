@@ -4,6 +4,8 @@ version = "0.1.0"
 authors = ["sourcepirate <plasmashadowx@gmail.com>"]
 
 [dependencies]
+serde_derive = "*"
+serde_json = "*"
 serde = "*"
 clap = "*"
 reqwest = "*"
