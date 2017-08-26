@@ -5,7 +5,7 @@ use std::io::{Read, BufReader};
 use serde_json::{from_str, Value};
 
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "lowercase")]
 pub struct Item {
     pub name: String,
     pub url: String,
