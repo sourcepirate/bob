@@ -12,6 +12,7 @@ pub enum FPMError{
 pub struct Fpm {
     pub source_type: String,
     pub target_type: String,
+    pub out: String,
     pub file: String,
     pub name: String,
     pub arch: String
@@ -26,6 +27,7 @@ impl Fpm {
              file: String::from(""),
              name: String::from(""),
              arch: String::from("all"),
+             out: String::from("")
          }
     }
 
@@ -44,6 +46,11 @@ impl Fpm {
         self
     }
 
+    pub fn outdir(&mut self, out: String) -> &Self {
+        self.out = out;
+        self
+    }
+
     pub fn execute(&self) -> Result<ExitStatus, FPMError> {
         let mut command = Command::new("fpm");
         command.arg("-s");
@@ -59,6 +66,11 @@ impl Fpm {
             command.arg(&self.name[..]);
         } else {
             return Err(FPMError::PACKAGENAMENOTFOUND);
+        }
+
+        if !self.out.is_empty(){
+            command.arg("-p");
+            command.arg(&self.out[..]);
         }
 
         if !self.file.is_empty(){

@@ -15,7 +15,7 @@ pub enum TargetTypes {
 }
 
 pub trait Packable {
-    fn build(&self, dir_path:String, target_type: TargetTypes, packagename: String) -> Option<i32>;
+    fn build(&self, dir_path:String, target_type: TargetTypes, packagename: String, outpath: String) -> Option<i32>;
 }
 
 pub struct Folder<T: Packable>{
@@ -46,7 +46,7 @@ impl TargetTypes {
 
 impl<T: Packable> Folder<T> {
 
-    pub fn build(self, target: TargetTypes, packagename: String) -> Option<i32> {
-        self.lang.build(self.path, target, packagename)
+    pub fn build(self, target: TargetTypes, packagename: String, outpath: String) -> Option<i32> {
+        self.lang.build(self.path, target, packagename, outpath)
     }
 }
