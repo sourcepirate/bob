@@ -90,7 +90,7 @@ fn main(){
 
 
     let mut batch = Batch::new(file_name.to_string(),
-                               TargetTypes::RPM,
+                               bin_type,
                                temp_path.to_string(),
                                out_path.to_string());
 
