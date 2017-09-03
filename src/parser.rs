@@ -4,7 +4,7 @@ use std::io;
 use std::io::{Read, BufReader};
 use serde_json::{from_str, Value};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "lowercase")]
 pub struct Item {
     pub name: String,
@@ -12,7 +12,7 @@ pub struct Item {
     pub language: String
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Items{
    pub packages: Vec<Item>
 }

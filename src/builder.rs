@@ -9,6 +9,7 @@ pub enum SourceTypes{
     TAR
 }
 
+#[derive(Debug, Clone, Copy)]
 pub enum TargetTypes {
     DEB,
     RPM
@@ -18,7 +19,7 @@ pub trait Packable {
     fn build(&self, dir_path:String, target_type: TargetTypes, packagename: String, outpath: String) -> Option<i32>;
 }
 
-pub struct Folder<T: Packable>{
+pub struct Folder<T> where T: Packable{
     pub path: String,
     pub lang: T
 }

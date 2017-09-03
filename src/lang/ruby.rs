@@ -8,6 +8,10 @@ use fpm::Fpm;
 
 pub struct Ruby;
 
+impl Ruby {
+    pub fn new() -> Self {Ruby{}}
+}
+
 fn list_gem_files(pac: String) -> Paths{
     glob(&pac[..]).unwrap()
 }

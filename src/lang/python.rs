@@ -8,7 +8,12 @@ use fpm::Fpm;
 
 pub struct Python;
 
+impl Python {
+    pub fn new()->Self {Python{}}
+}
+
 impl Packable for Python {
+
     fn build(&self, dir_path: String, target_type: TargetTypes, packagename: String, outpath: String) -> Option<i32> {
         let build_path :&Path = Path::new(&dir_path);
         let build_type = SourceTypes::PYTHON;
