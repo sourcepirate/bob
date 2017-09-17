@@ -19,9 +19,9 @@ pub trait Packable {
     fn build(&self, dir_path:String, target_type: TargetTypes, packagename: String, outpath: String) -> Option<i32>;
 }
 
-pub struct Folder<T> where T: Packable{
+pub struct Folder{
     pub path: String,
-    pub lang: T
+    pub lang: Box<Packable>
 }
 
 impl SourceTypes{
@@ -45,7 +45,7 @@ impl TargetTypes {
 }
 
 
-impl<T: Packable> Folder<T> {
+impl Folder {
 
     pub fn build(self, target: TargetTypes, packagename: String, outpath: String) -> Option<i32> {
         self.lang.build(self.path, target, packagename, outpath)

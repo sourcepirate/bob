@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use std::fs::{read_dir, ReadDir};
 use std::env::current_dir;
 use downloader::DownloadFile;
-use builder::TargetTypes;
+use builder::{TargetTypes, SourceTypes};
 use unarchiver::Unarchiver;
 use builder::{Packable, Folder};
 use lang::ruby::Ruby;
@@ -13,7 +13,8 @@ use parser::{Item, Items};
 #[derive(Debug, Clone)]
 pub enum ExecutionError{
     NOTVALIDDIR,
-    BATCHFAILURE
+    BATCHFAILURE,
+    SOURCENOTFOUND
 }
 
 #[derive(Debug, Clone)]
@@ -35,6 +36,23 @@ pub fn join(p1: &str, p2: &str) -> PathBuf{
     let parent : PathBuf = PathBuf::from(p1);
     let fragment : PathBuf = PathBuf::from(p2);
     parent.join(fragment)
+}
+
+
+pub fn select_language(lang: &str) -> Option<SourceTypes>{
+    match lang {
+        "python" => Some(SourceTypes::PYTHON),
+        "ruby" => Some(SourceTypes::GEM),
+        _ => None
+    }
+}
+
+pub fn select_struct(lang: SourceTypes) -> Option<Box<Packable>>{
+    match lang {
+        SourceTypes::PYTHON => Some(Box::new(Python)),
+        SourceTypes::GEM => Some(Box::new(Ruby)),
+        _ => None
+    }
 }
 
 impl Batch{
@@ -64,23 +82,18 @@ impl Batch{
             let unarchiver: Unarchiver = Unarchiver::new(&self.outpath[..]);
             let path_zip : String = unarchiver.unarchive(tar_path.to_str().unwrap().to_string(), self.outpath.clone()).unwrap();
 
-            if &item.language[..] == "python"{
-                let folder = Folder{
-                    path: path_zip,
-                    lang: Python
-                };
+            if let Some(source_lang) = select_language(&item.language[..]) {
+                let lang_impl  = select_struct(source_lang).unwrap();
+                let folder = Folder {
+                        path: path_zip,
+                        lang: lang_impl
+                    };
                 folder.build(self.to,
                              item.name.clone(),
                              absolute_rpm_path.to_str().unwrap().to_string());
 
-            }else {
-                let folder = Folder{
-                    path: path_zip,
-                    lang: Ruby
-                };
-                folder.build(self.to,
-                             item.name.clone(),
-                             absolute_rpm_path.to_str().unwrap().to_string());
+            } else {
+                return Err(ExecutionError::SOURCENOTFOUND);
             }
 
         }
